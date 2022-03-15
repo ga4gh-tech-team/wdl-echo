@@ -11,13 +11,21 @@ workflow echo {
         input:
             message1 = message1
     }
+
+    Boolean done1 = echoMessage1.done
+
     call echoMessage2 {
         input:
-            message2 = message2
+            message2 = message2,
+            previousDone = done1
     }
+
+    Boolean done2 = echoMessage2.done
+
     call echoMessage3 {
         input:
-            message3 = message3
+            message3 = message3,
+            previousDone = done2
     }
 }
 
@@ -38,12 +46,14 @@ task echoMessage1 {
 
     output {
         File message1_output = "message_1.txt"
+        Boolean done = true
     }
 }
 
 task echoMessage2 {
     input {
         String message2
+        Boolean previousDone
     }
 
     command {
@@ -58,12 +68,14 @@ task echoMessage2 {
 
     output {
         File message2_output = "message_2.txt"
+        Boolean done = true
     }
 }
 
 task echoMessage3 {
     input {
         String message3
+        Boolean previousDone
     }
 
     command {
@@ -78,5 +90,6 @@ task echoMessage3 {
 
     output {
         File message3_output = "message_3.txt"
+        Boolean done = true
     }
 }
